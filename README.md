@@ -18,7 +18,7 @@
 `Cookies.txt`を使用して、高品質な動画をダウンロードするかどうか
 引数は`yYnN`が使用可能。他の文字を入力した場合はもう一度入力を要求する。
 ### [`downloadyoutubelive.bat`](batches/downloadyoutubelive.bat)
-#### set /P sdfb=start download from beginning(y/n)
+#### Start download from beginning(y/n)
 DVRが有効な配信の最初からダウンロードするかどうか
 引数は`yYnN`が使用可能。他の文字を入力した場合はもう一度入力を要求する。
 # バッチファイル解析
@@ -113,7 +113,7 @@ echo This can download YouTube live streams.
 set /P url=Video URL 
 set /P output=Output file name without extension 
 :loop
-set /P sdfb=start download from beginning(y/n) 
+set /P sdfb=Start download from beginning(y/n) 
 if %sdfb%==y (
 set n=--live-from-start
 ) else if %sdfb%==Y (
