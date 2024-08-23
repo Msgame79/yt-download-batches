@@ -1,8 +1,8 @@
 @echo on
 chcp 65001
 echo This can download YouTube live streams. 
-set /P url=URL
-set /P output=output
+set /P url=Video URL 
+set /P output=Output File name without extension 
 :loop
 set /P sdfb=start download from beginning(y/n) 
 if %sdfb%==y (
