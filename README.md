@@ -12,7 +12,7 @@
 #### URL
 動画のURLを貼り付け(共有用リンクはリダイレクト先が正しければ正しく処理される)
 #### Output file name withoue extension
-出力ファイル名を入力する。ファイル名に使用できない文字(`\/:*?"<>|`)は使用不可(変数入力時は例外あり)。
+出力ファイル名を入力する。ファイル名に使用できない文字(`\/:*?"<>|`)とスペースは使用不可。
 ### [`downloadbilibili.bat`](batches/downloadbilibili.bat),[`downloadniconico.bat`](batches/downloadniconico.bat)
 #### Download HQ video using cookies(y/n)
 `Cookies.txt`を使用して、高品質な動画をダウンロードするかどうか
