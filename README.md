@@ -64,4 +64,4 @@ yt-dlp -o %output%.mp4 %url%
 ```
 コーデックを変更せずに別のコンテナに再多重化する。
 ## `output`に使える変数
-`Output file name without extension`の入力中`%%(variable)s`または`%%(variable)d`を追加することで、一定の文字列を追加することができる。使用可能な変数は[ここ](https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#output-template)で確認できる。
+`Output file name without extension`の入力中`%(variable)s`または`%(variable)d`を追加することで、一定の文字列を追加することができる。使用可能な変数は[ここ](https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#output-template)で確認できる。
