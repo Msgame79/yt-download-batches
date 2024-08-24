@@ -1,6 +1,6 @@
 @echo off
 chcp 65001
-echo This can download bilibili videos. Premium/Normal member can download 1080p60/4K,720p60 with a cookie file generated from Get cookies.txt LOCALLY (https://x.gd/G3xMs). 
+echo This can download bilibili videos. Premium/Normal member can download 1080p60/4K,720p60 with a cookie file generated from Get cookies.txt LOCALLY (https://x.gd/G3xMs).
 set /P url=Video URL 
 set /P output=Output file name without extension 
 :loop
