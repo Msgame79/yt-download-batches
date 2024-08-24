@@ -1,6 +1,6 @@
 # 使い方
 ## 事前準備
-1. [ffmpeg-master-latest-win64-gpl.zip](https://github.com/BtbN/FFmpeg-Builds/releases/tag/latest)と[yt-dlp.exe](https://github.com/yt-dlp/yt-dlp/releases)をインストールし、環境変数PATHを通しておく。
+1. [ffmpeg-master-latest-win64-gpl.zip](https://github.com/BtbN/FFmpeg-Builds/releases/tag/latest)と[yt-dlp.exe](https://github.com/yt-dlp/yt-dlp-nightly-builds/releases)をインストールし、環境変数PATHを通しておく。
 2. 自分がわかる場所にフォルダを作っておき、そのフォルダ内にバッチファイルや`Cookies.txt`(後述)を配置する。
 ## `Cookies.txt`のダウンロード(Chrome用)
 1. [Get cookies.txt LOCALLY](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)をChromeにインストール
@@ -12,7 +12,7 @@
 #### URL
 動画のURLを貼り付け(共有用リンクはリダイレクト先が正しければ正しく処理される)
 #### Output file name withoue extension
-出力ファイル名を入力する。ファイル名に使用できない文字(`\/:*?"<>|`)やスペースは使用不可。
+出力ファイル名を入力する。ファイル名に使用できない文字(`\/:*?"<>|`)は使用不可(変数入力時は例外あり)。
 ### [`downloadbilibili.bat`](batches/downloadbilibili.bat),[`downloadniconico.bat`](batches/downloadniconico.bat)
 #### Download HQ video using cookies(y/n)
 `Cookies.txt`を使用して、高品質な動画をダウンロードするかどうか
@@ -163,11 +163,22 @@ yt-dlp -U
 ```
 yt-dlp -o %output%.mp4 %url%
 ```
-変数`output`と`url`を使用して引数を設定する。以下にここで使われるオプションを表示する。
+変数`output`と`url`を使用して引数を使用する。以下にここで使われるオプションを表示する。
 ```
 -f [FORMAT]
 ```
-ダウンロード時のフォーマットを指定する。
+ダウンロード時のフォーマットを指定する。詳細は[yt-dlpのドキュメント](https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#format-selection)参照。
 ```
--f bv+ba
+--cookies cookies.txt
 ```
+`cookies.txt`を使用してサイトにログインしてからダウンロードする。bilibiliやニコニコ動画(プレミアム会員のみ)ではダウンロードの品質が向上する。
+```
+--recode-video mp4
+```
+引数(`mp4`)に対応していないコーデックがあれば引数(`mp4`)に対応したコーデックに変換する。
+```
+--remux-video mp4
+```
+コーデックを変更せずに別のコンテナに再多重化する。
+## `output`に使える変数
+`Output file name without extension`の入力中`%%(variable)s`または`%%(variable)d`を追加することで、一定の文字列を追加することができる。使用可能な変数は[ここ](https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#output-template)で確認できる。
