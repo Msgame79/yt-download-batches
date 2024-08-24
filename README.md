@@ -95,6 +95,16 @@ yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]" -o %output%.mp4 %url%
 goto loop
 )
 ```
+## [`downloadtiktok.bat`](batches/downloadtiktok.bat)
+```
+@echo off
+chcp 65001
+echo This can download TikTok videos. 
+set /P url=Video URL 
+set /P output=Output file name without extension 
+yt-dlp -U
+yt-dlp -f "best[ext=mp4][vcodec*=h264]" -o %output%.mp4 %url%
+```
 ## [`downloadyoutube.bat`](batches/downloadyoutube.bat)
 ```
 @echo off
