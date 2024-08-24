@@ -1,6 +1,6 @@
 @echo on
 chcp 65001
-echo This can download YouTube live streams. 
+echo This can download YouTube live streams.
 set /P url=Video URL 
 set /P output=Output file name without extension 
 :loop
