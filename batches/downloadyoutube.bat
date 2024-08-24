@@ -1,6 +1,6 @@
 @echo off
 chcp 65001
-echo This can download YouTube videos. 
+echo This can download YouTube videos.
 set /P url=Video URL 
 set /P output=Output file name without extension 
 yt-dlp -U
