@@ -18,4 +18,4 @@ goto loop
 )
 pause
 yt-dlp -U
-yt-dlp -f bv+ba %n% -o %output%.mp4 %url%
+yt-dlp -f bv+ba --recode-video mp4 %n% -o %output%.mp4 %url%
