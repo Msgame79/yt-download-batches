@@ -1,6 +1,6 @@
 # 使い方
 ## 事前準備
-1. [ffmpeg-master-latest-win64-gpl.zip](https://github.com/BtbN/FFmpeg-Builds/releases/tag/latest)と[yt-dlp.exe](https://github.com/yt-dlp/yt-dlp-nightly-builds/releases)をインストールし、環境変数PATHを通しておく。
+1. [ffmpeg-master-latest-win64-gpl.zip](https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip)と[yt-dlp.exe](https://github.com/yt-dlp/yt-dlp-nightly-builds/releases)をインストールし、環境変数PATHを通しておく。
 2. 自分がわかる場所にフォルダを作っておき、そのフォルダ内にバッチファイルや`Cookies.txt`(後述)を配置する。
 ## `Cookies.txt`のダウンロード(Chrome用)
 1. [Get cookies.txt LOCALLY](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)をChromeにインストール
