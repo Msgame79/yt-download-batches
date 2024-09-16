@@ -1,5 +1,11 @@
 echo Beginning of section>help.txt
 
+ffmpeg -version>>a.txt
+
+echo End of section>>a.txt
+
+echo Beginning of section>>a.txt
+
 ffmpeg -h full>>help.txt
 
 echo End of section>>help.txt
