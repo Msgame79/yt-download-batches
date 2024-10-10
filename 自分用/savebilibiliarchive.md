@@ -1,4 +1,3 @@
-```
 @echo off
 
 chcp 65001
@@ -118,4 +117,3 @@ cd ..
 del /q a
 
 rmdir a
-```
