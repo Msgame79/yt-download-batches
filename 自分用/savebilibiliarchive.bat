@@ -8,7 +8,7 @@ echo このバッチファイルはbilibili動画、サムネイルとそれに�
 
 echo (任意)バッチファイルと同じフォルダにbilibiliにログインしたcookies.txtがあると高画質でダウンロードできます。
 
-echo 
+echo バッチ実行前にcookies.txtを更新しておくことをおすすめします。
 
 echo 確認済みの動作環境
 
@@ -28,7 +28,7 @@ echo 環境変数path %LOCALAPPDATA%\Microsoft\WinGet\Packages\Gyan.FFmpeg_Micro
 
 echo %LOCALAPPDATA%\Microsoft\WinGet\Packages\yt-dlp.yt-dlp.nightly_Microsoft.Winget.Source_8wekyb3d8bbwe^(yt-dlpインストール時に登録される^)
 
-echo C^:\Program Files\7-Zip^(インストールだけでは環境変数に登録されないので自分で環境変数Pathに登録するか^)
+echo C^:\Program Files\7-Zip^(インストールだけでは環境変数に登録されないので自分で環境変数Pathに登録するか113行目の7zをフルパス^(^"C:\Program Files\7-Zip\7z^"^)にする^)
 
 echo.
 
