@@ -64,6 +64,12 @@ echo.
 
 set /p output=
 
+del %output%.zip
+
+del /q a
+
+rmdir /q a
+
 cls
 
 echo プレビュー
@@ -73,8 +79,6 @@ echo URL^: %url%
 echo 出力ファイル名^: %output%.zip
 
 echo.
-
-del %output%.zip
 
 winget upgrade ffmpeg
 
