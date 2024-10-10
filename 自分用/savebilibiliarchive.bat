@@ -8,25 +8,27 @@ echo このバッチファイルはbilibili動画、サムネイルとそれに�
 
 echo (任意)バッチファイルと同じフォルダにbilibiliにログインしたcookies.txtがあると高画質でダウンロードできます。
 
+echo 
+
 echo 確認済みの動作環境
 
 echo Windows 11 Home 23H2
 
-echo FFmpeg 7.1 from winget
+echo FFmpeg 7.1 from winget install Gyan.FFmpeg
 
-echo yt-dlp-nightly@2024.10.07.232845 from winget
+echo yt-dlp-nightly@2024.10.07.232845 from winget install yt-dlp.yt-dlp.nightly
 
 echo Microsoft PowerShell 5.1.22621.4249 built-in
 
-echo 7-Zip 24.08 from winget
+echo 7-Zip 24.08 from winget install 7zip.7zip
 
 echo Get cookies.txt LOCALLY from Chrome Web Store ^(https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc^)
 
-echo 環境変数path %LOCALAPPDATA%\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-7.1-full_build\bin
+echo 環境変数path %LOCALAPPDATA%\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-7.1-full_build\bin^(ffmpegインストール時に登録される^)
 
-echo %LOCALAPPDATA%\Microsoft\WinGet\Packages\yt-dlp.yt-dlp.nightly_Microsoft.Winget.Source_8wekyb3d8bbwe
+echo %LOCALAPPDATA%\Microsoft\WinGet\Packages\yt-dlp.yt-dlp.nightly_Microsoft.Winget.Source_8wekyb3d8bbwe^(yt-dlpインストール時に登録される^)
 
-echo C^:\Program Files\7-Zip^(システム環境変数のpathに登録^)
+echo C^:\Program Files\7-Zip^(インストールだけでは環境変数に登録されないので自分で環境変数Pathに登録するか^)
 
 echo.
 
