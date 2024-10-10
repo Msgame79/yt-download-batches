@@ -4,7 +4,7 @@ set a=0
 
 set b=1
 
-set c=
+set c=1
 
 echo %a%
 
