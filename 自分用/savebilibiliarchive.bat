@@ -262,8 +262,6 @@ cd %output%
 
 7z a %output%.zip *> nul
 
-move %output%.zip ..> nul
-
 cd ..
 
 cls
@@ -294,9 +292,9 @@ echo zip作成完了^(8/9^)
 
 echo 不要なファイルを削除中^(9/9^)
 
-del /q %output%*.mp4> nul
+del /q %output%*> nul
 
-del /q %output%*.json> nul
+move %output%\%output%.zip .> nul
 
 del /q %output%\*> nul
 
