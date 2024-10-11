@@ -146,6 +146,10 @@ echo 動画ダウンロード中^(4/9^)
 
 mkdir %output%
 
+echo Downloaded at %date% %time:~0,8% JST>%output%\%output%.json
+
+echo.>%output%\%output%.json
+
 yt-dlp -q --progress --cookies cookies.txt -f "bv+ba/best" --recode-video mp4 --write-info-json -o "%output%_%%(autonumber)04d.%%(ext)s" %url% 
 
 cls
