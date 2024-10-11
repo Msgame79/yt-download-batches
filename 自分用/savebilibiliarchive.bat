@@ -98,6 +98,8 @@ del /q %output%\*> nul
 
 rmdir /q %output%> nul
 
+del /q %output%*> nul
+
 cls
 
 echo プレビュー
