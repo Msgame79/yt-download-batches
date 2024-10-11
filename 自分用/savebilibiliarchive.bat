@@ -16,6 +16,8 @@ echo 確認済みの動作環境
 
 echo Windows 11 Home 23H2
 
+echo winget built-in
+
 echo FFmpeg 7.1 from winget install Gyan.FFmpeg
 
 echo yt-dlp-nightly@2024.10.07.232845 from winget install yt-dlp.yt-dlp.nightly
@@ -38,7 +40,11 @@ set /p install=動作環境をセットアップまたはソフトウェアを�
 
 if /i "%install%"=="y" (
 
-winget install Gyan.FFmpeg
+winget uninstall yt-dlp.yt-dlp.nightly
+
+winget uninstall ffmpeg
+
+winget uninstall 7zip.7zip
 
 winget install yt-dlp.yt-dlp.nightly
 
@@ -48,7 +54,7 @@ echo 実行完了。10秒後に自動で終了します。7-zipについては�
 
 timeout /t 10 /nobreak> nul
 
-exit
+goto end
 
 ) else if /i "%install%"=="n" (
 
@@ -99,6 +105,8 @@ echo バッチ実行前にcookies.txtを更新しておくことをおすすめ�
 echo 確認済みの動作環境
 
 echo Windows 11 Home 23H2
+
+echo winget built-in
 
 echo FFmpeg 7.1 from winget install Gyan.FFmpeg
 
@@ -153,6 +161,8 @@ echo バッチ実行前にcookies.txtを更新しておくことをおすすめ�
 echo 確認済みの動作環境
 
 echo Windows 11 Home 23H2
+
+echo winget built-in
 
 echo FFmpeg 7.1 from winget install Gyan.FFmpeg
 
@@ -234,7 +244,7 @@ rmdir /q %output%\%output%> nul
 
 del /q %output%\*> nul
 
-rmdir /f /q %output%> nul
+rmdir /q %output%> nul
 
 cls
 
@@ -254,7 +264,7 @@ echo %output%フォルダ作成^(3/9^)
 
 mkdir %output%
 
-cd %output%
+mkdir %output%\%output%
 
 cls
 
@@ -274,13 +284,20 @@ echo %output%フォルダ作成完了^(3/9^)
 
 echo 動画とjsonファイルのダウンロード^(4/9^)
 
-echo Downloaded at %date% %time: =0%>%output%\%output%.json
+echo Downloaded at %date% %time: =0%>%output%\%output%\%output%.json
 
-echo.>>%output%\%output%.json
+echo.>>%output%\%output%\%output%.json
 
-yt-dlp -q --progress --cookies cookies.txt -f "bv+ba/best" --recode-video mp4 --write-info-json -o "%output%_%%(autonumber)04d.%%(ext)s" %url%
+if exist "cookies.txt" (
 
-cls
+yt-dlp -q --progress --cookies cookies.txt -f "bv+ba/best" --recode-video mp4 --write-info-json -o "%output%\%output%_%%(autonumber)04d.%%(ext)s" %url%
+
+) else (
+
+yt-dlp -q --progress -f "bv+ba/best" --recode-video mp4 --write-info-json -o "%output%\%output%_%%(autonumber)04d.%%(ext)s" %url%
+
+)
+
 
 echo プレビュー
 
@@ -300,7 +317,7 @@ echo 動画とjsonファイルのダウンロード完了^(4/9^)
 
 echo サムネイルのダウンロード^(5/9^)
 
-yt-dlp -q --progress -w --skip-download --write-thumbnail -o "%output%\%output%.%%(ext)s" %url% 
+yt-dlp -q -w --skip-download --write-thumbnail -o "%output%\%output%\%output%.%%(ext)s" %url% 
 
 cls
 
@@ -324,11 +341,15 @@ echo サムネイルのダウンロード完了^(5/9^)
 
 echo 動画の処理^(6/9^)
 
-dir /b %output%*.mp4>%output%.txt
+cd %output%> nul
+
+dir /b *.mp4>%output%.txt
 
 for /f "delims=" %%a in (%output%.txt) do (echo file %%a>>%output%1.txt)
 
-ffmpeg -loglevel -8 -f concat -i %output%2.txt -c copy %output%\%output%.mp4
+ffmpeg -loglevel -8 -f concat -i %output%1.txt -c copy %output%\%output%.mp4
+
+cd %~DP0> nul
 
 cls
 
@@ -354,11 +375,11 @@ echo 動画の処理完了^(6/9^)
 
 echo jsonファイルの処理^(7/9^)
 
-dir /b %output%*.json>%output%1.txt
+dir /b %output%\%output%_*.json>%output%\%output%2.txt> nul
 
-for /f "delims=" %%b in (%output%1.txt) do (type %%b nul>>%output%.json)
+for /f "delims=" %%b in (%output%\%output%2.txt) do (type %output%\%%b nul>>%output%\%output%.json)> nul
 
-powershell -Command "Get-Content %output%.json -Encoding UTF8 | ForEach-Object { [System.Net.WebUtility]::HtmlDecode($_) } | Out-File %output%\%output%.json -append"> nul
+powershell -Command "Get-Content %output%\%output%.json -Encoding UTF8 | ForEach-Object { [System.Net.WebUtility]::HtmlDecode($_) } | Out-File %output%\%output%\%output%.json -encoding UTF8 -Append"> nul
 
 cls
 
@@ -386,13 +407,13 @@ echo jsonファイルの処理完了^(7/9^)
 
 echo %output%.zipの作成^(8/9^)
 
-cd %output%
+cd %output%\%output%> nul
 
 7z a %output%.zip *> nul
 
-move %output%.zip ..\..
+move %output%.zip %~DP0> nul
 
-cd ..\..
+cd %~DP0> nul
 
 cls
 
@@ -428,7 +449,7 @@ rmdir /q %output%\%output%> nul
 
 del /q %output%\*> nul
 
-rmdir /f /q %output%> nul
+rmdir /q %output%> nul
 
 cls
 
@@ -461,3 +482,5 @@ echo %output%フォルダの削除完了^(9/9^)
 echo 実行完了。10秒後に自動で終了します。
 
 timeout /t 10 /nobreak> nul
+
+:end
