@@ -228,7 +228,7 @@ echo jsonファイル処理中^(7/9^)
 
 dir /b %output%*.json>%output%1.txt
 
-for /f "delims=" %%b in (%output%1.txt) do (type %%b>>%output%.json>>%output%.json& echo.>>%output%.json)
+for /f "delims=" %%b in (%output%1.txt) do (type %%b>>%output%.json>>& echo.>>%output%.json)
 
 powershell -Command "Get-Content %output%.json -Encoding UTF8 | ForEach-Object { [System.Net.WebUtility]::HtmlDecode($_) } | Out-File a\%output%.json"> nul
 
