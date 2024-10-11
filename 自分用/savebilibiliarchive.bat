@@ -146,7 +146,7 @@ echo 動画ダウンロード中^(4/9^)
 
 mkdir %output%
 
-echo Downloaded at %date% %time:~0,8% JST>%output%\%output%.json
+echo Downloaded at %date% %time%>%output%\%output%.json
 
 echo.>>%output%\%output%.json
 
