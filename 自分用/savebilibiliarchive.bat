@@ -294,7 +294,9 @@ echo zip作成完了^(8/9^)
 
 echo 不要なファイルを削除中^(9/9^)
 
-del /q %output%*> nul
+del /q %output%*.mp4> nul
+
+del /q %output%*.json> nul
 
 del /q %output%\*> nul
 
