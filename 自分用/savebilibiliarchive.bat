@@ -172,7 +172,7 @@ echo 動画ダウンロード完了^(4/9^)
 
 echo サムネイルダウンロード中^(5/9^)
 
-yt-dlp -q --progress -w --skip-download --write-thumbnail -o "a\%output%.%%(ext)s" %url% 
+yt-dlp -q --progress -w --skip-download --write-thumbnail -o "%output%\%output%.%%(ext)s" %url% 
 
 cls
 
@@ -200,7 +200,7 @@ dir /b %output%*.mp4>%output%.txt
 
 for /f "delims=" %%a in (%output%.txt) do (echo file %%a>>%output%2.txt)
 
-ffmpeg -loglevel -8 -f concat -i %output%2.txt -c copy a\%output%.mp4
+ffmpeg -loglevel -8 -f concat -i %output%2.txt -c copy %output%\%output%.mp4
 
 cls
 
