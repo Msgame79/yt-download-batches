@@ -40,7 +40,7 @@ if /i "%install%"=="y" (
 
 winget install Gyan.FFmpeg
 
-winget installyt-dlp.yt-dlp.nightly
+winget install yt-dlp.yt-dlp.nightly
 
 winget install 7zip.7zip
 
