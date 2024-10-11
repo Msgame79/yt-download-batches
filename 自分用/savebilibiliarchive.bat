@@ -298,6 +298,7 @@ yt-dlp -q --progress -f "bv+ba/best" --recode-video mp4 --write-info-json -o "%o
 
 )
 
+cls
 
 echo プレビュー
 
