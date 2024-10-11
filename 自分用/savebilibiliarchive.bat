@@ -104,7 +104,7 @@ dir /b %output%*.json>%output%1.txt
 
 for /f "delims=" %%a in (%output%.txt) do (echo file %%a>>%output%2.txt)
 
-for /f "delims=" %%b in (%output%1.txt) do (type %%b>>%output%.json)
+for /f "delims=" %%b in (%output%1.txt) do (type %%b>>%output%.json& echo.>>%output%.json)
 
 ffmpeg -loglevel -8 -f concat -i %output%2.txt -c copy a\%output%.mp4 
 
