@@ -188,8 +188,6 @@ echo.
 
 echo URLを入力
 
-echo ^&は使用しないでください。なんなら^&以降は消してください。
-
 echo 使用可能なURLの例
 
 echo https^://www.bilibili.com/video/BVid
@@ -204,7 +202,7 @@ echo https://x.gd/A0JKD
 
 echo.
 
-echo %url%
+echo %url:&=^&%
 
 goto loop2
 
@@ -214,7 +212,7 @@ cls
 
 echo プレビュー
 
-echo URL^: %url%
+echo URL^: %url:&=^&%
 
 echo 出力ファイル名^: %output%.zip
 
@@ -228,7 +226,7 @@ cls
 
 echo プレビュー
 
-echo URL^: %url%
+echo URL^: %url:&=^&%
 
 echo 出力ファイル名^: %output%.zip
 
@@ -250,7 +248,7 @@ cls
 
 echo プレビュー
 
-echo URL^: %url%
+echo URL^: %url:&=^&%
 
 echo 出力ファイル名^: %output%.zip
 
@@ -270,7 +268,7 @@ cls
 
 echo プレビュー
 
-echo URL^: %url%
+echo URL^: %url:&=^&%
 
 echo 出力ファイル名^: %output%.zip
 
@@ -288,13 +286,15 @@ echo Downloaded at %date% %time: =0%>%output%\%output%\%output%.json
 
 echo.>>%output%\%output%\%output%.json
 
+yt-dlp -q -U
+
 if exist "cookies.txt" (
 
-yt-dlp -q --progress --cookies cookies.txt -f "bv+ba/best" --recode-video mp4 --write-info-json -o "%output%\%output%_%%(autonumber)04d.%%(ext)s" %url%
+yt-dlp -q --progress --cookies cookies.txt -f "bv+ba/best" --recode-video mp4 --write-info-json -o "%output%\%output%_%%(autonumber)04d.%%(ext)s" %url:&=^&%
 
 ) else (
 
-yt-dlp -q --progress -f "bv+ba/best" --recode-video mp4 --write-info-json -o "%output%\%output%_%%(autonumber)04d.%%(ext)s" %url%
+yt-dlp -q --progress -f "bv+ba/best" --recode-video mp4 --write-info-json -o "%output%\%output%_%%(autonumber)04d.%%(ext)s" %url:&=^&%
 
 )
 
@@ -302,7 +302,7 @@ cls
 
 echo プレビュー
 
-echo URL^: %url%
+echo URL^: %url:&=^&%
 
 echo 出力ファイル名^: %output%.zip
 
@@ -318,13 +318,13 @@ echo 動画とjsonファイルのダウンロード完了^(4/9^)
 
 echo サムネイルのダウンロード^(5/9^)
 
-yt-dlp -q -w --skip-download --write-thumbnail -o "%output%\%output%\%output%.%%(ext)s" %url% 
+yt-dlp -q -w --skip-download --write-thumbnail -o "%output%\%output%\%output%.%%(ext)s" %url:&=^&% 
 
 cls
 
 echo プレビュー
 
-echo URL^: %url%
+echo URL^: %url:&=^&%
 
 echo 出力ファイル名^: %output%.zip
 
@@ -356,7 +356,7 @@ cls
 
 echo プレビュー
 
-echo URL^: %url%
+echo URL^: %url:&=^&%
 
 echo 出力ファイル名^: %output%.zip
 
@@ -376,9 +376,9 @@ echo 動画の処理完了^(6/9^)
 
 echo jsonファイルの処理^(7/9^)
 
-dir /b %output%\%output%_*.json>%output%\%output%2.txt> nul
+dir /b %output%\%output%_*.json>%output%\%output%2.txt
 
-for /f "delims=" %%b in (%output%\%output%2.txt) do (type %output%\%%b nul>>%output%\%output%.json)> nul
+for /f "delims=" %%b in (%output%\%output%2.txt) do (type %output%\%%b nul>>%output%\%output%.json)
 
 powershell -Command "Get-Content %output%\%output%.json -Encoding UTF8 | ForEach-Object { [System.Net.WebUtility]::HtmlDecode($_) } | Out-File %output%\%output%\%output%.json -encoding UTF8 -Append"> nul
 
@@ -386,7 +386,7 @@ cls
 
 echo プレビュー
 
-echo URL^: %url%
+echo URL^: %url:&=^&%
 
 echo 出力ファイル名^: %output%.zip
 
@@ -420,7 +420,7 @@ cls
 
 echo プレビュー
 
-echo URL^: %url%
+echo URL^: %url:&=^&%
 
 echo 出力ファイル名^: %output%.zip
 
@@ -456,7 +456,7 @@ cls
 
 echo プレビュー
 
-echo URL^: %url%
+echo URL^: %url:&=^&%
 
 echo 出力ファイル名^: %output%.zip
 
