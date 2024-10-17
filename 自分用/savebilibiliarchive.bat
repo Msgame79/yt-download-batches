@@ -74,8 +74,6 @@ echo.
 
 echo URLを入力
 
-echo ^&は使用しないでください。なんなら^&以降は消してください。
-
 echo 使用可能なURLの例
 
 echo https^://www.bilibili.com/video/BVid
@@ -380,9 +378,11 @@ dir /b %output%\%output%_*.json>%output%\%output%2.txt
 
 for /f "delims=" %%b in (%output%\%output%2.txt) do (
 
-type %output%\%%b nul>>%output%\%output%.json
+type %output%\%%b>>%output%\%output%.json
 
-type nul>>%output%\%output%.json
+echo.>>%output%\%output%.json
+
+echo.>>%output%\%output%.json
 
 )
 
