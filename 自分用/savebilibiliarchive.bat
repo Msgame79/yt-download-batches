@@ -40,13 +40,23 @@ set /p install=動作環境をセットアップまたはソフトウェアを�
 
 if /i "%install%"=="y" (
 
-winget uninstall yt-dlp.yt-dlp.nightly
+echo %cd%^>winget uninstall --force yt-dlp.yt-dlp.nightly
 
-winget uninstall ffmpeg
+winget uninstall --force yt-dlp.yt-dlp.nightly
 
-winget uninstall 7zip.7zip
+echo %cd%^>winget uninstall --force ffmpeg
+
+winget uninstall --force ffmpeg
+
+echo %cd%^>winget uninstall --force 7zip.7zip
+
+winget uninstall --force 7zip.7zip
+
+echo %cd%^>winget install yt-dlp.yt-dlp.nightly
 
 winget install yt-dlp.yt-dlp.nightly
+
+echo %cd%^>winget install 7zip.7zip
 
 winget install 7zip.7zip
 
