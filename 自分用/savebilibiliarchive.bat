@@ -378,7 +378,13 @@ echo jsonファイルの処理^(7/9^)
 
 dir /b %output%\%output%_*.json>%output%\%output%2.txt
 
-for /f "delims=" %%b in (%output%\%output%2.txt) do (type %output%\%%b nul>>%output%\%output%.json)
+for /f "delims=" %%b in (%output%\%output%2.txt) do (
+
+type %output%\%%b nul>>%output%\%output%.json
+
+type nul>>%output%\%output%.json
+
+)
 
 powershell -Command "Get-Content %output%\%output%.json -Encoding UTF8 | ForEach-Object { [System.Net.WebUtility]::HtmlDecode($_) } | Out-File %output%\%output%\%output%.json -encoding UTF8 -Append"> nul
 
