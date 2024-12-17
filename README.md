@@ -1,7 +1,7 @@
 # 使い方
 ## 事前準備
 1. [ffmpeg-(version)-full_build.7zまたはffmpeg-(version)-full_build.zip
-](https://github.com/GyanD/codexffmpeg/releases)と[yt-dlp.exe](https://github.com/yt-dlp/yt-dlp-nightly-builds/releases)をインストールし、環境変数PATHを通しておく。
+](https://github.com/GyanD/codexffmpeg/releases/latest)と[yt-dlp.exe](https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/latest)をインストールし、環境変数PATHを通しておく。
 2. 自分がわかる場所にフォルダを作っておき、そのフォルダ内にバッチファイルや`Cookies.txt`(後述)を配置する。
 ## `Cookies.txt`のダウンロード(Chrome用)
 1. [Get cookies.txt LOCALLY](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)をChromeにインストール
