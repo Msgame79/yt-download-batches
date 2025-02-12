@@ -11,6 +11,8 @@ Set-Location $PSScriptRoot
 [array]$list = @()
 [string]$codec = ""
 [string]$thumbnailconfirm = "Y"
+[string]$vencodesetting = "-c:v h264_nvenc -qmax 18 -qmin 18"
+[string]$aencodesetting = "-c:a copy"
 
 # check if ffmpeg, ffprobe and yt-dlp are available
 ffprobe -version | Out-Null
@@ -70,7 +72,7 @@ while ($true) {
     if ($list.Count -ge 2) {
         "connecting videos"
         $list | ForEach-Object {"file $_" | Out-File "list.txt" -Append -Encoding utf8NoBOM}
-        ffmpeg -y -loglevel -8 -f concat -i "list.txt" -c:v h264_nvenc -qmax 18 -qmin 18 "${output}1.mp4"
+        ffmpeg -y -loglevel -8 -f concat -i "list.txt" $vencodesetting $aencodesetting "${output}1.mp4"
         $list | ForEach-Object {Remove-Item $_}
         if (Test-Path "list.txt") {
             "deleting list.txt"
@@ -85,7 +87,7 @@ while ($true) {
     $codec = ffprobe -hide_banner -loglevel 16 -of "default=nw=1:nk=1" -select_streams v:0 -show_entries "stream=codec_name" "${output}1.mp4"
     if (-not $codec -match "^h264$") {
         "transcoding to h264"
-        ffmpeg -y -loglevel -8 -i "${output}1.mp4" -c:v h264_nvenc -qmax 18 -qmin 18 -c:a copy "${output}.mp4"
+        ffmpeg -y -loglevel -8 -i "${output}1.mp4" $vencodesetting $aencodesetting "${output}.mp4"
     } else {
         Rename-Item "${output}1.mp4" "${output}.mp4"
     }
