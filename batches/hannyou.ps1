@@ -68,7 +68,6 @@ while ($true) {
     }
     $list = Get-ChildItem -Name | Where-Object {$_ -match "${output}_\d+\.[^\.]+"}
     if ($list.Count -ge 2) {
-    } else {
         "connecting videos"
         $list | ForEach-Object {"file $_" | Out-File "list.txt" -Append -Encoding utf8NoBOM}
         ffmpeg -y -loglevel -8 -f concat -i "list.txt" -c:v h264_nvenc -qmax 18 -qmin 18 "${output}1.mp4"
@@ -79,6 +78,7 @@ while ($true) {
                 Remove-Item "list.txt"
             } until ($?)
         }
+    } else {
     }
     $list = @()
     $codec = ffprobe -hide_banner -loglevel 16 -of "default=nw=1:nk=1" -select_streams v:0 -show_entries "stream=codec_name" "${output}1.mp4"
