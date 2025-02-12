@@ -1,9 +1,8 @@
 # ps1 encoding
 chcp 65001
 
-Set-Location $PSScriptRoot
-
 # default values
+[string]$wd = "$PSScriptRoot"
 [string]$url = ""
 [string]$output = ""
 [int]$len = 0
@@ -13,6 +12,8 @@ Set-Location $PSScriptRoot
 [string]$thumbnailconfirm = "Y"
 [string]$vencodesetting = "-c:v h264_nvenc -qmax 18 -qmin 18"
 [string]$aencodesetting = "-c:a copy"
+
+Set-Location $wd
 
 # check if ffmpeg, ffprobe and yt-dlp are available
 ffprobe -version | Out-Null
@@ -38,19 +39,24 @@ if (-not $?) {
 while ($true) {
     do { # yt-dlpがダウンロードできるURLを書くまで繰り返し
         Clear-Host
+        "Current Setting`nDirectory: $wd`nVideo encoding setting: $vencodesetting`nAudio encoding setting: $aencodesetting"
         $url = Read-Host -Prompt "URL"
-        yt-dlp -F $url | Out-Null
+        if (Test-Path -Path "cookies.txt") {
+            $cookies = "--cookies ""cookies.txt"""
+        } else {
+            $cookies = "--no-cookies"
+        }
+        yt-dlp -F $cookies $url | Out-Null
     } until ($?)
     do { # 出力ファイル名を指定(上書きとファイル名に使ってほしくない文字を回避)
         Clear-Host
-        "URL: $url"
+        "Current Setting`nDirectory: $wd`nVideo encoding setting: $vencodesetting`nAudio encoding setting: $aencodesetting`nURL: $url"
         $output = Read-Host -Prompt "output filename without extension"
         $len = $output.Length
     } until ($len -ge 1 -and $len -le 255 -and $output -match "[^\u0020\u0022\u002a\u002f\u003a\u003c\u003e\u003f\u005c\u007c\u3000]{$len}" -and -not (Test-Path "$output.mp4"))
     do {
         Clear-Host
-        "URL: $url"
-        "output filename without extension: $output"
+        "Current Setting`nDirectory: $wd`nVideo encoding setting: $vencodesetting`nAudio encoding setting: $aencodesetting`nURL: $url`noutput filename without extension: $output"
         $thumbnailconfirm = Read-Host -Prompt "Download thumbnail?(yYnN)"
     } until ($thumbnailconfirm -match "^[yYnN]$")
     if (Test-Path -Path "cookies.txt") {
