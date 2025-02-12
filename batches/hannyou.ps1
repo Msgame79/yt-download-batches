@@ -79,6 +79,7 @@ while ($true) {
             } until ($?)
         }
     } else {
+        Rename-Item "${output}_1.mp4" "${output}1.mp4"
     }
     $list = @()
     $codec = ffprobe -hide_banner -loglevel 16 -of "default=nw=1:nk=1" -select_streams v:0 -show_entries "stream=codec_name" "${output}1.mp4"
