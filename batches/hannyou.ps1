@@ -51,7 +51,7 @@ while ($true) {
         "output filename without extension: $output"
         $thumbnailconfirm = Read-Host -Prompt "Download thumbnail?(yYnN)"
     } until ($thumbnailconfirm -match "^[yYnN]$")
-    if (Test-Path -Path """cookies.txt""") {
+    if (Test-Path -Path "cookies.txt") {
         "I use cookies.txt"
         $cookies = "--cookies ""cookies.txt"""
     } else {
