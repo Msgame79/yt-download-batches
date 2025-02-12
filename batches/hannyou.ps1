@@ -51,9 +51,9 @@ while ($true) {
         "output filename without extension: $output"
         $thumbnailconfirm = Read-Host -Prompt "Download thumbnail?(yYnN)"
     } until ($thumbnailconfirm -match "^[yYnN]$")
-    if (Test-Path -Path "cookies.txt") {
+    if (Test-Path -Path """cookies.txt""") {
         "I use cookies.txt"
-        $cookies = "--cookies cookies.txt"
+        $cookies = "--cookies ""cookies.txt"""
     } else {
         "I don't use cookies.txt"
         $cookies = "--no-cookies"
@@ -73,10 +73,12 @@ while ($true) {
         $list | ForEach-Object {"file $_" | Out-File "list.txt" -Append -Encoding utf8NoBOM}
         ffmpeg -y -loglevel -8 -f concat -i "list.txt" -c:v h264_nvenc -qmax 18 -qmin 18 "${output}1.mp4"
         $list | ForEach-Object {Remove-Item $_}
-        "deleting list.txt"
-        do {
-            Remove-Item "list.txt"
-        } until ($?)
+        if (Test-Path "list.txt") {
+            "deleting list.txt"
+            do {
+                Remove-Item "list.txt"
+            } until ($?)
+        }
     }
     $list = @()
     $codec = ffprobe -hide_banner -loglevel 16 -of "default=nw=1:nk=1" -select_streams v:0 -show_entries "stream=codec_name" "${output}1.mp4"
