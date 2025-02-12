@@ -92,9 +92,9 @@ while ($true) {
     if ($thumbnailconfirm -match "[yY]") {
         "downloading thumbnail(${output}.png)"
         yt-dlp -q --force-overwrites --skip-download --write-thumbnail --convert-thumbnails png -o "$output.%(ext)s" $url
-        "${output}.mp4 and ${output}.png saved successfully`nenter to continue"
+        "${output}.mp4 and ${output}.png saved successfully`nenter to restart"
     } else {
-        "${output}.mp4 saved successfully`nenter to continue"
+        "${output}.mp4 saved successfully`nenter to restart"
     }
     Read-Host
 }
