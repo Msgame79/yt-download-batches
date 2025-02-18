@@ -41,7 +41,7 @@ while ($true) {
         Clear-Host
         "Current Setting`nDirectory: $wd`nVideo encoding setting: $vencodesetting`nAudio encoding setting: $aencodesetting"
         $url = Read-Host -Prompt "URL"
-        if (Test-Path -Path "cookies.txt") {
+        if (Test-Path -Path ".\cookies.txt") {
             $cookies = "--cookies ""cookies.txt"""
         } else {
             $cookies = "--no-cookies"
