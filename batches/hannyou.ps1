@@ -13,6 +13,7 @@ chcp 65001
 [string]$vencodesetting = "-c:v h264_nvenc -qmax 18 -qmin 18"
 [string]$aencodesetting = "-c:a copy"
 
+$ErrorActionPreference = 'SilentlyContinue'
 Set-Location $wd
 
 # check if ffmpeg, ffprobe and yt-dlp are available
