@@ -42,7 +42,7 @@ while ($true) {
         "Current Setting`nDirectory: $wd`nVideo encoding setting: $vencodesetting`nAudio encoding setting: $aencodesetting"
         $url = Read-Host -Prompt "URL"
         if (Test-Path -Path ".\cookies.txt") {
-            $cookies = "--cookies ""cookies.txt"""
+            $cookies = "--cookies .\cookies.txt"
         } else {
             $cookies = "--no-cookies"
         }
@@ -59,9 +59,9 @@ while ($true) {
         "Current Setting`nDirectory: $wd`nVideo encoding setting: $vencodesetting`nAudio encoding setting: $aencodesetting`nURL: $url`noutput filename without extension: $output"
         $thumbnailconfirm = Read-Host -Prompt "Download thumbnail?(yYnN)"
     } until ($thumbnailconfirm -match "^[yYnN]$")
-    if (Test-Path -Path "cookies.txt") {
+    if (Test-Path -Path ".\cookies.txt") {
         "I use cookies.txt"
-        $cookies = "--cookies ""cookies.txt"""
+        $cookies = "--cookies .\cookies.txt"
     } else {
         "I don't use cookies.txt"
         $cookies = "--no-cookies"
