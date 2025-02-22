@@ -32,14 +32,18 @@ if ($?) {
         } until ($?)
     }
     $codec = ffprobe -hide_banner -loglevel 16 -of "default=nw=1:nk=1" -select_streams v:0 -show_entries "stream=codec_name" "${output}1.mp4"
-    if (-not $codec -match "^h264$") {
-        ffmpeg -y -loglevel -8 -i "${output}1.mp4" -c:v h264_nvenc -qmax 18 -qmin 18 -c:a copy "${output}.mp4"
-    } else {
+    if ($codec -match "^h264$") {
         Rename-Item "${output}1.mp4" "${output}.mp4"
+    } else {
+        ffmpeg -y -loglevel -8 -i "${output}1.mp4" -c:v h264_nvenc -qmax 18 -qmin 18 -c:a copy "${output}.mp4"
+        do {
+            Remove-Item "${output}1.mp4"
+        } until ($?)
     }
     yt-dlp -q --force-overwrites --skip-download --write-thumbnail --convert-thumbnails png -o "${output}" -R infinite "${url}"
     if ((Get-ItemProperty "${output}.png").Length -ge 2097152) {
         ffmpeg -hide_banner -loglevel 0 -y -i "${output}.png" -c mjpeg -q 0 -frames:v 1 "${output}.jpg"
+
         do {
             Remove-Item "${output}.png"
         } until ($?)
