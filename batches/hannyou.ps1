@@ -38,7 +38,7 @@ while ($true) {
         Clear-Host
         do {
             $url = Read-Host -Prompt "URL"
-        } until ($url -match "^https://[^ ]+")
+        } until ($url -match "^https?://[^ ]+")
         yt-dlp -F $url | Out-Null
     } until ($?)
     do { # 出力ファイル名を指定(上書きとファイル名に使ってほしくない文字を回避)
