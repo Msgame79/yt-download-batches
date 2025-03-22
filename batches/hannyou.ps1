@@ -1,11 +1,11 @@
-$ErrorActionPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'Continue'
 
 # 編集可能な変数
 [string]$defaultfolder = "$PSScriptRoot" # デフォルト: $PSScriptRoot
 [string]$formatselector = "bv+ba/best" # デフォルト: "bv+ba/best"
 [string]$thumbnailextension = "png" # デフォルト: "png" 使用可能な拡張子: png,jpg,ewbp
-[string]$vencodesetting = "-c:v libx264 -crf 21" # デフォルト: "-c:v libx264 -crf 21" フィルターをかけるので"-c:v copy"は使えない
-[string]$aencodesetting = "-c:a aac -q:a 1" # デフォルト: "-c:a aac -q:a 1" デフォルトではあえて再エンコードするように書いているが、できるなら"-c:a copy"が良い
+[string]$vencodesetting = "-vcodec h264_nvenc -qp 18" # デフォルト: "-c:v libx264 -crf 21" フィルターをかけるので"-c:v copy"は使えない
+[string]$aencodesetting = "-acodec aac -aq 1" # デフォルト: "-c:a aac -q:a 1" デフォルトではあえて再エンコードするように書いているが、できるなら"-c:a copy"が良い
 [string]$outputextension = "mp4" # デフォルト: "mp4" デフォルトがmp4向けのエンコード設定のため。ただし上のエンコード設定によっては変える必要あり、あとここで編集させているのはすぐ上にエンコード設定があるから。使用可能な拡張子: avi, flv, gif, mkv, mov, mp4, webm, aac, aiff, alac, flac, m4a, mka, mp3, ogg, opus, vorbis, wav
 <#
 目的別いろんなエンコードメモ
@@ -49,14 +49,18 @@ VP9(lissless)+Opus(非可逆圧縮だがWebm側が可逆圧縮の音声コーデ
 [string]$url = ""
 [string]$startat = ""
 [string]$endat = ""
-[UInt64]$starttime = 0
-[UInt64]$endtime = 0
+[uint]$starttime = 0
+[uint]$endtime = 0
 [string]$thumbnailselector = ""
 [string]$cookies = ""
 [string]$outputfilename = ""
 [string]$files = ""
 [string]$guid = (New-Guid).Guid
 [System.Object]$processlength = $null
+[int]$hour = 0
+[int]$minute = 0
+[int]$second = 0
+[int]$millisecond = 0
 
 # メイン処理
 Set-Location $defaultfolder
@@ -86,30 +90,38 @@ $logtext += "動画エンコード設定`n${vencodesetting}`n音声エンコー�
 do {
     Clear-Host
     $url = Read-Host -Prompt $logtext
-    yt-dlp -q -F "${url}" | Out-Null
+    #yt-dlp -q -F "${url}" | Out-Null
 } until ($?)
-if ((yt-dlp -F "${url}"| Where-Object {$_ -match "^\[info\]"}).Count -eq 1) {
+if (<#(yt-dlp -F "${url}"| Where-Object {$_ -match "^\[info\]"}).Count -eq #>1) {
     $logtext += ": ${url}`n開始時間(秒(.ミリ秒)または((時間:)分:)秒(.ミリ秒)表記、0で最初を指定、-1で次をスキップし、最初から最後までダウンロード)"
     do {
         Clear-Host
         $startat = Read-Host -Prompt $logtext
-    } until ($startat -match "^(0|-1|[^\d]*\d+([^\d]+\d{1,3}[^\d]*)?|[^\d]*(\d+[^\d]+)?([0-5]?\d[^\d]+)?[0-5]?\d([^\d]+\d{1,3}[^\d]*)?)$")
+    } until ($startat -match "^(0+(\.0*)?|-0*1(\.0*)?|\d+(\.\d{1,3})?|((\d+:)?[0-5]?\d:)?([0-5]?\d|\d)(\.\d{1,3})?)$")
     $logtext += ": ${startat}`n"
     if ($startat -match "^-1$") {
         $startat = "0"
         $endat = "inf"
     } else {
-        if ($startat -match "^([^\d]*(?<second>\d+)([^\d]+(?<millisecond>\d{1,3})[^\d]*)?|[^\d]*((?<hour>\d+)[^\d]+)?((?<minute>[0-5]?\d)[^\d]+)?(?<second>[0-5]?\d)([^\d]+(?<millisecond>\d{1,3})[^\d]*)?)$") {
-            $starttime = [uint]$Matches.hour * 3600000 + [uint]$Matches.minute * 60000 + [uint]$Matches.second * 1000 + [uint]($Matches.millisecond).PadRight(3,("0"))
+        if ($startat -match "^((?<second>\d+)(\.(?<millisecond>\d{1,3}))?|(((?<hour>\d+):)?(?<minute>[0-5]?\d):)?(?<second>[0-5]?\d)(\.(?<millisecond>\d{1,3}))?)$") {
+            $hour = [int]$Matches.hour
+            $minute = [int]$Matches.minute
+            $second = [int]$Matches.second
+            $millisecond = [int]$Matches.millisecond
+            $starttime = $hour * 3600000 + $minute * 60000 + $second * 1000 + $millisecond
         }
         $logtext += "終了時間(秒(.ミリ秒)または((時間:)分:)秒(.ミリ秒)表記、-1またはinfで最後までダウンロード)"
         do {
             do {
                 Clear-Host
-                $endat = Read-Host -Prompt $logtext
-            } until ($endat -match "^(-1|inf|[^\d]*\d+([^\d]+\d{1,3}[^\d]*)?|[^\d]*(\d+[^\d]+)?([0-5]?\d[^\d]+)?[0-5]?\d([^\d]+\d{1,3}[^\d]*)?)$")
-            if ($endat -match "^([^\d]*(?<second>\d+)([^\d]+(?<millisecond>\d{1,3})[^\d]*)?|[^\d]*((?<hour>\d+)[^\d]+)?((?<minute>[0-5]?\d)[^\d]+)?(?<second>[0-5]?\d)([^\d]+(?<millisecond>\d{1,3})[^\d]*)?)$") {
-                $endtime = [uint]$Matches.hour * 3600000 + [uint]$Matches.minute * 60000 + [uint]$Matches.second * 1000 + [uint]($Matches.millisecond).PadRight(3,("0"))
+                $endat = Read-Host -Prompt "$logtext"
+            } until ($endat -match "^(-0*1(\.0*)?|inf|\d+(\.\d{1,3})?|((\d+:)?[0-5]?\d:)?[0-5]?\d(\.\d{1,3})?)$")
+            if ($endat -match "^((?<second>\d+)(\.(?<millisecond>\d{1,3}))?|(((?<hour>\d+):)?(?<minute>[0-5]?\d):)?(?<second>[0-5]?\d)(\.(?<millisecond>\d{1,3}))?)$") {
+                $hour = [int]$Matches.hour
+                $minute = [int]$Matches.minute
+                $second = [int]$Matches.second
+                $millisecond = [int]$Matches.millisecond
+                $endtime = $hour * 3600000 + $minute * 60000 + $second * 1000 + $millisecond
             } else {
                 $endat = "inf"
             }
@@ -123,24 +135,28 @@ if ((yt-dlp -F "${url}"| Where-Object {$_ -match "^\[info\]"}).Count -eq 1) {
 $logtext += "サムネイルの処理、0=ダウンロードしない、1=動画とは別にダウンロード、2=動画へ埋め込む(画像は保存しない)、3=埋め込みと画像で保存"
 do {
     Clear-Host
+    $starttime
+    $endtime
     $thumbnailselector = Read-Host -Prompt $logtext
-} until ($thumbnailselector)
+} until ($thumbnailselector -match "^[0-3]$")
 $logtext += ": ${thumbnailselector}`n出力ファイル名(拡張子なし)"
 do {
     Clear-Host
     $outputfilename = Read-Host -Prompt $logtext
 } until ($outputfilename -notmatch "[\u0020\u0022\u002a\u002f\u003a\u003c\u003e\u003f\u005c\u007c\u3000]" -and (Get-ChildItem -Name -File | Where-Object {$_ -cmatch "^${outputfilename}(1|_\d{3})?\.(${outputextension}|${thumbnailextension})$"}).Count -eq 0)
+Clear-Host
 Write-Host -Object "${logtext}: ${outputfilename}"
 if (Test-Path -Path ".\cookies.txt") {
     Write-Host -Object "cookies.txtを使用します"
-    $cookies = "--cookies cookies.txt"
+    $cookies = "--cookies 
+    cookies.txt"
 } else {
     Write-Host -Object "cookies.txtが見つかりません"
     $cookies = "--no-cookies"
 }
 $processlength = Measure-Command -Expression {
     Write-Host -Object "(yt-dlp)動画ダウンロード中"
-    yt-dlp --quiet --progress --download-sections "*${startat}-${endat}" $cookies --format """${formatselector}""" --downloader-args "ffmpeg_i:-loglevel quiet" --downloader-args "ffmpeg_o:${vencodesetting} ${aencodesetting}" --remux_video $outputextension --output "${outputfilename}_%(autonumber)03d.%(ext)s" --retries infinite $url
+    yt-dlp --quiet --progress --download-sections "*${startat}-${endat}" $cookies --format "${formatselector}" --downloader-args "ffmpeg_i:-loglevel quiet" --downloader-args "ffmpeg_o:${vencodesetting} ${aencodesetting} -f matroska" --remux-video $outputextension --output "${outputfilename}_%(autonumber)03d.%(ext)s" --retries infinite $url
     if ((Get-ChildItem -Name | Where-Object {$_ -match "${outputfilename}_\d{3}\.$outputextension$"}).Count - 1) {
         Get-ChildItem -Name | Where-Object {$_ -match "${outputfilename}_\d{3}\.$outputextension$"} | ForEach-Object {$files += "file ${_}`n"}
         New-Item -Path ".\${guid}.txt" -ItemType File -Value $files
@@ -168,4 +184,4 @@ $processlength = Measure-Command -Expression {
     }
 }
 "ダウンロードにかかった時間: $((($processlength.Hours).ToString()).PadLeft(2,'0')):$((($processlength.Minutes).ToString()).PadLeft(2,'0')):$((($processlength.Seconds).ToString()).PadLeft(2,'0')).$((($processlength.Milliseconds).ToString()).PadLeft(3,'0'))`nEnterで終了"
-Write-Host
+Read-Host
