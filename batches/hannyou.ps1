@@ -82,7 +82,7 @@ if ($thumbnailextension -notmatch "^(jpg|png|webp)$") {
     Read-Host
     exit
 }
-if ($outputextension -notmatch "^(avi|flv|gif|mkv|mov|mp4|webm|aac|aiff|alac|flac|m4a|mka|mp3|ogg|opus|vorbis|wav)$") {
+if ($outputextension -notmatch "^(avi|flv|gif|mkv|mov|mp4|webm|ogv|asf|aac|aiff|alac|flac|m4a|mka|mp3|ogg|opus|vorbis|wav)$") {
     "`$outputextensionの値が不正です`nEnterで終了"
     Read-Host
     exit
