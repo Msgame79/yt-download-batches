@@ -144,15 +144,14 @@ if ($?) {
         Write-Host -Object "${logtext}: ${outputfilename}"
         if (Test-Path -Path ".\cookies.txt") {
             Write-Host -Object "cookies.txtを使用します"
-            $cookies = "--cookies 
-            cookies.txt"
+            $cookies = "--cookies cookies.txt"
         } else {
-            Write-Host -Object "cookies.txtが見つかりません"
+            Write-Host "cookies.txtが見つかりません"
             $cookies = "--no-cookies"
         }
         $processlength = Measure-Command -Expression {
             Write-Host -Object "(yt-dlp)動画ダウンロード中"
-            yt-dlp --quiet --progress --download-sections "*${startat}-${endat}" $cookies --format "${formatselector}" --downloader-args "ffmpeg_i:-loglevel quiet" --downloader-args "ffmpeg_o:${vencodesetting} ${aencodesetting} -f matroska" --remux-video $outputextension --output "${outputfilename}_%(autonumber)03d.%(ext)s" --retries infinite $url
+            "yt-dlp --quiet --progress --download-sections ""*${startat}-${endat}"" $cookies --format ""${formatselector}"" --downloader-args ""ffmpeg_i:-loglevel quiet"" --downloader-args ""ffmpeg_o:${vencodesetting} ${aencodesetting} -f matroska"" --remux-video $outputextension --output ""${outputfilename}_%(autonumber)03d.%(ext)s"" --retries infinite $url" | Invoke-Expression
             if ((Get-ChildItem -Name | Where-Object {$_ -match "${outputfilename}_\d{3}\.$outputextension$"}).Count - 1) {
                 Get-ChildItem -Name | Where-Object {$_ -match "${outputfilename}_\d{3}\.$outputextension$"} | ForEach-Object {$files += "file ${_}`n"}
                 New-Item -Path ".\${guid}.txt" -ItemType File -Value $files
@@ -165,7 +164,7 @@ if ($?) {
             }
             if ([int]$thumbnailselector) {
                 Write-Host -Object "(yt-dlp)サムネイルダウンロード中"
-                yt-dlp --quiet --max-downloads 1 --skip-download --write-thumbnail --convert-thumbnails $thumbnailextension $cookies --output "${outputfilename}.%(ext)s" $url
+                "yt-dlp --quiet --max-downloads 1 --skip-download --write-thumbnail --convert-thumbnails $thumbnailextension $cookies --output ""${outputfilename}.%(ext)s"" $url" | Invoke-Expression
                 if ([int]$thumbnailselector - 1) {
                     ffmpeg -hide_banner -loglevel -8 -i "${outputfilename}1.${outputextension}" -i "${outputfilename}.${thumbnailextension}" -map 0 -map 1 -c copy -disposition:v:1 attached_pic "${outputfilename}.${outputextension}"
                     Remove-Item "${outputfilename}1.${outputextension}"
@@ -202,18 +201,17 @@ if ($?) {
         Write-Host -Object "${logtext}: ${outputfilename}"
         if (Test-Path -Path ".\cookies.txt") {
             Write-Host -Object "cookies.txtを使用します"
-            $cookies = "--cookies 
-            cookies.txt"
+            $cookies = "--cookies cookies.txt"
         } else {
             Write-Host -Object "cookies.txtが見つかりません"
             $cookies = "--no-cookies"
         }
         $processlength = Measure-Command -Expression {
             Write-Host -Object "(yt-dlp)動画ダウンロード中"
-            yt-dlp --quiet --progress $cookies --format "${formatselector}" --output "${outputfilename}_%(autonumber)03d.%(ext)s" --retries infinite $url
+            "yt-dlp --quiet --progress $cookies --format ""${formatselector}"" --output ""${outputfilename}_%(autonumber)03d.%(ext)s"" --retries infinite $url" | Invoke-Expression
             if ([int]$thumbnailselector) {
                 Write-Host -Object "(yt-dlp)サムネイルダウンロード中"
-                yt-dlp --quiet --max-downloads 1 --skip-download --write-thumbnail --convert-thumbnails $thumbnailextension $cookies --output "${outputfilename}.%(ext)s" $url
+                "yt-dlp --quiet --max-downloads 1 --skip-download --write-thumbnail --convert-thumbnails $thumbnailextension $cookies --output ""${outputfilename}.%(ext)s"" $url" | Invoke-Expression
             }
         }
     }
