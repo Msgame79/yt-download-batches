@@ -54,6 +54,7 @@ VP9(lissless)+Opus(非可逆圧縮だがWebm側が可逆圧縮の音声コーデ
 [uint]$endtime = 0
 [string]$thumbnailselector = ""
 [string]$cookies = ""
+[string]$ytcookies = ""
 [string]$outputfilename = ""
 [string]$files = ""
 [string]$guid = (New-Guid).Guid
@@ -143,8 +144,22 @@ if ($?) {
         Clear-Host
         Write-Host -Object "${logtext}: ${outputfilename}"
         if (Test-Path -Path ".\cookies.txt") {
-            Write-Host -Object "cookies.txtを使用します"
-            $cookies = "--cookies cookies.txt"
+            if((yt-dlp -F "${url}" | Where-Object {$_ -match "\[youtube\]"}).Count -ge 1) {
+                Do {
+                    $logtext += "cookies.txtを使用しますか[y/n]`n非公開の動画のみ使用してください"
+                    $ytcookies = Read-Host -Prompt $logtext
+                } until ($ytcookies -match "^[yn]$")
+                if ($ytcookies -match "^y$") {
+                    Write-Host -Object "cookies.txtを使用します"
+                    $cookies = "--cookies cookies.txt"
+                } else {
+                    Write-Host -Object "cookies.txtを使用しません"
+                    $cookies = "--no-cookies"
+                }
+            } else {
+                Write-Host -Object "cookies.txtを使用します"
+                $cookies = "--cookies cookies.txt"
+            }
         } else {
             Write-Host "cookies.txtが見つかりません"
             $cookies = "--no-cookies"
@@ -200,8 +215,22 @@ if ($?) {
         Clear-Host
         Write-Host -Object "${logtext}: ${outputfilename}"
         if (Test-Path -Path ".\cookies.txt") {
-            Write-Host -Object "cookies.txtを使用します"
-            $cookies = "--cookies cookies.txt"
+            if((yt-dlp -F "${url}" | Where-Object {$_ -match "\[youtube\]"}).Count -ge 1) {
+                Do {
+                    $logtext += "cookies.txtを使用しますか[y/n]`n非公開の動画のみ使用してください"
+                    $ytcookies = Read-Host -Prompt $logtext
+                } until ($ytcookies -match "^[yn]$")
+                if ($ytcookies -match "^y$") {
+                    Write-Host -Object "cookies.txtを使用します"
+                    $cookies = "--cookies cookies.txt"
+                } else {
+                    Write-Host -Object "cookies.txtを使用しません"
+                    $cookies = "--no-cookies"
+                }
+            } else {
+                Write-Host -Object "cookies.txtを使用します"
+                $cookies = "--cookies cookies.txt"
+            }
         } else {
             Write-Host -Object "cookies.txtが見つかりません"
             $cookies = "--no-cookies"
