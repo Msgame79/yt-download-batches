@@ -146,7 +146,7 @@ if ($?) {
         if (Test-Path -Path ".\cookies.txt") {
             if((yt-dlp -F "${url}" | Where-Object {$_ -match "\[youtube\]"}).Count -ge 1) {
                 Do {
-                    $logtext += "cookies.txtを使用しますか[y/n]`n非公開の動画のみ使用してください"
+                    $logtext += "cookies.txtを使用しますか[y/n]`n非公開の動画、もしくはCookieを必要とする場合(捨て垢でのログイン推奨)のみ使用してください"
                     $ytcookies = Read-Host -Prompt $logtext
                 } until ($ytcookies -match "^[yn]$")
                 if ($ytcookies -match "^y$") {
