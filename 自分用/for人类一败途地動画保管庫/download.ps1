@@ -42,8 +42,7 @@ if (($args).Count -eq 2)
             "When it's stuck, press Ctrl+C"
             $guid = (New-Guid).Guid
             New-Item -ItemType Directory "$($num)" | Out-Null
-            Start-Process "yt-dlp" "--force-overwrite --quiet --progress --format ""bv[vcodec*=avc]+ba"" -R infinite -o ""$($num)\$($args[0])_%(autonumber)03d.mp4"" https://www.bilibili.com/video/$($bv)" -Wait -NoNewWindow
-            #Start-Process "yt-dlp" "--force-overwrite --quiet --progress --format ""bv[vcodec*=avc]+ba"" -R infinite --cookies cookies.txt -o ""$($num)\$($args[0])_%(autonumber)03d.mp4"" https://www.bilibili.com/video/$($bv)" -Wait -NoNewWindow # use this line if you use cookies
+            Start-Process "yt-dlp" "--force-overwrite --quiet --progress --format ""bv[vcodec*=avc]+ba"" -R infinite --cookies cookies.txt -o ""$($num)\$($args[0])_%(autonumber)03d.mp4"" https://www.bilibili.com/video/$($bv)" -Wait -NoNewWindow
             Get-ChildItem -Name "$($num)" | ForEach-Object {"file $($_)" | Out-File "$($num)\$($guid).txt" -Append}
             Start-Process "ffmpeg" "-loglevel -8 -f concat -i ""$($num)\$($guid).txt"" -c copy $($num)\$($args[0]).mp4" -Wait -NoNewWindow
             Get-ChildItem -Name "$($num)" | Where-Object {$_ -ne "output$($num).mp4"} | ForEach-Object {Remove-Item "$($num)\$($_)"}
