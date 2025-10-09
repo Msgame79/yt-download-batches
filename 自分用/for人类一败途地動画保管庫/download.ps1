@@ -47,6 +47,7 @@ if (($args).Count -eq 2)
             Start-Process "ffmpeg" "-loglevel -8 -f concat -i ""$($num)\$($guid).txt"" -c copy $($num)\$($args[0]).mp4" -Wait -NoNewWindow
             Get-ChildItem -Name "$($num)" | Where-Object {$_ -ne "output$($num).mp4"} | ForEach-Object {Remove-Item "$($num)\$($_)"}
             Start-Process "yt-dlp" "--quiet --max-downloads 1 --skip-download --write-thumbnail --convert-thumbnails png -R infinite -o ""$($num)\$($args[0]).%(ext)s"" https://www.bilibili.com/video/$($bv)" -Wait -NoNewWindow
+            Start-Process "yt-dlp" "--quiet --max-downloads 1 --skip-download --write-thumbnail --convert-thumbnails jpg -R infinite -o ""$($num)\$($args[0]).%(ext)s"" https://www.bilibili.com/video/$($bv)" -Wait -NoNewWindow
             exit(0)
         }
         else
