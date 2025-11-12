@@ -53,7 +53,6 @@ if (($args).Count -eq 2)
                 $ins2 += "[v$a][$($a-1):a]"
                 $scales += "($(ffprobe -hide_banner -i "$num\$_.mp4" -loglevel 0 -select_streams v -of "default=nw=1:nk=1" -show_entries "stream=coded_width")x$(ffprobe -hide_banner -i "$num\$_.mp4" -loglevel 0 -select_streams v -of "default=nw=1:nk=1" -show_entries "stream=coded_width"))"
             }
-            "${ins1};${ins2}concat=n=${a}:v=1:a=1[v][a]"
             Start-Process "ffmpeg" "-loglevel -8 ${ins}-filter_complex ""${ins1}${ins2}concat=n=${a}:v=1:a=1[v][a]"" -map ""[v]"" -map ""[a]"" -c:v h264_nvenc -qp 21 -c:a aac -b:a 192k $($num)\$($args[0]).mp4" -Wait -NoNewWindow
             Get-ChildItem -Name "$($num)" | Where-Object {$_ -ne "output$($num).mp4"} | ForEach-Object {Remove-Item "$($num)\$($_)"}
             Start-Process "yt-dlp" "--quiet --max-downloads 1 --skip-download --write-thumbnail --convert-thumbnails png -R infinite -o ""$($num)\$($args[0]).%(ext)s"" https://www.bilibili.com/video/$($bv)" -Wait -NoNewWindow
@@ -62,6 +61,7 @@ if (($args).Count -eq 2)
             $scales | ForEach-Object {
                 "$_"
             }
+            "Exiting with code 0"
             exit(0)
         }
         else
