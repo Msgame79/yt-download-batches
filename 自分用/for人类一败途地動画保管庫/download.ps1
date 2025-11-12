@@ -39,11 +39,20 @@ if (($args).Count -eq 2)
                 )
             }
             "When it's stuck, press Ctrl+C"
-            $guid = (New-Guid).Guid
             New-Item -ItemType Directory "$($num)" | Out-Null
-            Start-Process "yt-dlp" "--force-overwrite --quiet --progress --format ""bv[vcodec*=avc]+ba"" -R infinite --cookies cookies.txt -o ""$($num)\$($args[0])_%(autonumber)03d.mp4"" https://www.bilibili.com/video/$($bv)" -Wait -NoNewWindow
-            Get-ChildItem -Name "$($num)" | ForEach-Object {"file $($_)" | Out-File "$($num)\$($guid).txt" -Append}
-            Start-Process "ffmpeg" "-loglevel -8 -f concat -i ""$($num)\$($guid).txt"" -c copy $($num)\$($args[0]).mp4" -Wait -NoNewWindow
+            Start-Process "yt-dlp" "--force-overwrite --quiet --progress --format ""bv+ba"" -R infinite --cookies cookies.txt -o ""$($num)\$($args[0])_%(autonumber)03d.mp4"" https://www.bilibili.com/video/$($bv)" -Wait -NoNewWindow
+            $ins = ""
+            $ins1 = ""
+            $ins2 = ""
+            $a = 0
+            Get-ChildItem -Name "$($num)" | ForEach-Object {
+                $ins += "-i ""${num}\${_}"" "
+                $ins1 += "[${a}:v]scale=s=hd1080[v$($a+1)];"
+                $a++
+                $ins2 += "[v$a][$($a-1):a]"
+            }
+            "${ins1};${ins2}concat=n=${a}:v=1:a=1[v][a]"
+            Start-Process "ffmpeg" "-loglevel -8 ${ins}-filter_complex ""${ins1}${ins2}concat=n=${a}:v=1:a=1[v][a]"" -map ""[v]"" -map ""[a]"" -c:v h264_nvenc -qp 21 -c:a aac -b:a 192k $($num)\$($args[0]).mp4" -Wait -NoNewWindow
             Get-ChildItem -Name "$($num)" | Where-Object {$_ -ne "output$($num).mp4"} | ForEach-Object {Remove-Item "$($num)\$($_)"}
             Start-Process "yt-dlp" "--quiet --max-downloads 1 --skip-download --write-thumbnail --convert-thumbnails png -R infinite -o ""$($num)\$($args[0]).%(ext)s"" https://www.bilibili.com/video/$($bv)" -Wait -NoNewWindow
             Start-Process "yt-dlp" "--quiet --max-downloads 1 --skip-download --write-thumbnail --convert-thumbnails jpg -R infinite -o ""$($num)\$($args[0]).%(ext)s"" https://www.bilibili.com/video/$($bv)" -Wait -NoNewWindow
@@ -66,4 +75,8 @@ else
 {
     "Invalid arguments(0x1)"
     exit(1)
+}
+Get-ChildItem -Recurse -Name | Where-Object {$_ -match "\.mp4$"} | ForEach-Object {
+    "$_"
+    ffprobe -hide_banner -i $_ -loglevel 0 -select_streams v -of "default=nw=1:nk=1" -show_entries "stream=coded_height"
 }
